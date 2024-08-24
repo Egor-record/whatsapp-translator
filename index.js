@@ -1,14 +1,23 @@
+require('dotenv').config()
 const { Client } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const OpenAI = require("openai");
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-const ai = new OpenAI({ apiKey: OPENAI_API_KEY });
+const ai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const client = new Client();
 
+const WHITELIST = [
+    process.env.MY_PHONE + '@c.us',
+    process.env.EVA + '@c.us',
+    process.env.IMKE + '@c.us',
+    process.env.BAS + '@c.us',
+    process.env.JENSKE + '@c.us',
+    process.env.JAN + '@c.us',
+    process.env.JEANINE + '@c.us'
+];
+
 const translate = (msgBody) => {
     return new Promise((resolve, reject) => {
-        console.log("inside promise");
 
         const request = {
             model: 'gpt-3.5-turbo',
@@ -40,7 +49,7 @@ client.on('ready', () => {
 
 client.on('message', msg => {
 
-    if (msg.from !== process.env.MY_PHONE + '@c.us') return
+    if (!WHITELIST.includes(msg.from)) return;
 
     translate(msg.body)
     .then(gptResponse => {
@@ -51,7 +60,6 @@ client.on('message', msg => {
         console.error("Error during translation:", error);
     });
 
-    
 });
 
 
