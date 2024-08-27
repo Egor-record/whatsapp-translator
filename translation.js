@@ -46,8 +46,8 @@ const server = http.createServer((req, res) => {
     });
 
     req.on('end', () => {
-        const response = JSON.parce(body)
-        
+        const response = JSON.parse(body)
+
         translate(response.message)
         .then(gptResponse => {
             res.writeHead(200, { 'Content-Type': 'application/json' });
