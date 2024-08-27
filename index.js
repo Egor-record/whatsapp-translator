@@ -4,6 +4,8 @@ const qrcode = require('qrcode-terminal');
 const OpenAI = require("openai");
 const ai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
+const http = require('http');
+
 const client = new Client({
   puppeteer: {
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
@@ -86,5 +88,22 @@ client.on('message', msg => {
 
 });
 
-console.log("Starting process!")
-client.initialize();
+// Define the port to listen on
+const port = 3500;
+
+// Create an HTTP server
+const server = http.createServer((req, res) => {
+  // Set the response header and status code
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+
+  // Send a response body
+  res.end('Hello, World!\n');
+});
+
+// Listen on the specified port
+server.listen(port, () => {
+  console.log(`Server is listening on port ${port}`);
+});
+
+
+// client.initialize();
