@@ -40,6 +40,7 @@ const translate = (msgBody) => {
 }
 
 client.on('qr', (qr) => {
+    console.log("QR Code")
     qrcode.generate(qr, {small: true});
 });
 
@@ -62,5 +63,5 @@ client.on('message', msg => {
 
 });
 
-
+console.log("Starting process!")
 client.initialize();
