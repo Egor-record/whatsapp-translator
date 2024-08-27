@@ -4,17 +4,10 @@ const qrcode = require('qrcode-terminal');
 const OpenAI = require("openai");
 const ai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-const http = require('http');
-
 const client = new Client({
   puppeteer: {
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
-  },
-  webVersionCache: {
-    type: "remote",
-    remotePath:
-      "https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2412.54.html",
-  },
+  }
 });
 
 const WHITELIST = [
@@ -77,33 +70,16 @@ client.on('message', msg => {
 
     if (!WHITELIST.includes(msg.from)) return;
 
-    translate(msg.body)
-    .then(gptResponse => {
-        client.sendMessage(msg.from, gptResponse);
-    })
-    .catch(error => {
-        client.sendMessage(msg.from, 'Error during translation :(');
-        console.error("Error during translation:", error);
-    });
+    // translate(msg.body)
+    // .then(gptResponse => {
+    //     client.sendMessage(msg.from, gptResponse);
+    // })
+    // .catch(error => {
+    //     client.sendMessage(msg.from, 'Error during translation :(');
+    //     console.error("Error during translation:", error);
+    // });
 
 });
 
-// Define the port to listen on
-const port = 3500;
 
-// Create an HTTP server
-const server = http.createServer((req, res) => {
-  // Set the response header and status code
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-
-  // Send a response body
-  res.end('Hello, World!\n');
-});
-
-// Listen on the specified port
-server.listen(port, () => {
-  console.log(`Server is listening on port ${port}`);
-});
-
-
-// client.initialize();
+client.initialize();
