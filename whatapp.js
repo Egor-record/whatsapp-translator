@@ -1,7 +1,7 @@
 require('dotenv').config()
 const { Client } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
-
+const fetch = require('node-fetch');
 
 const client = new Client({
   puppeteer: {
@@ -45,8 +45,6 @@ client.on('auth_failure', () => {
 client.on('message', msg => {
 
     if (!WHITELIST.includes(msg.from)) return;
-
-    const fetch = require('node-fetch');
 
     fetch(process.env.IP + ':' + PORT, {
       method: 'POST',

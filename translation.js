@@ -29,10 +29,14 @@ const translate = (msgBody) => {
 
 
 
-// Create an HTTP server
+
 const server = http.createServer((req, res) => {
-  // Only handle POST requests
-  if (req.method === 'POST') {
+
+    if (req.method !== 'POST') {
+        res.writeHead(405, { 'Content-Type': 'text/plain' });
+        res.end('Method Not Allowed');
+    }
+
     let body = '';
 
     // Collect the data chunks
@@ -41,11 +45,10 @@ const server = http.createServer((req, res) => {
 
     });
 
-    // When all the data is received, process it
     req.on('end', () => {
-        console.log('Received POST data:', body);
-
-        translate(body.message)
+        const response = JSON.parce(body)
+        
+        translate(response.message)
         .then(gptResponse => {
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ gptResponse: gptResponse }));
@@ -65,11 +68,7 @@ const server = http.createServer((req, res) => {
       res.writeHead(500, { 'Content-Type': 'text/plain' });
       res.end('Internal Server Error');
     });
-  } else {
-    // For any non-POST requests, send a 405 Method Not Allowed response
-    res.writeHead(405, { 'Content-Type': 'text/plain' });
-    res.end('Method Not Allowed');
-  }
+
 });
 
 
