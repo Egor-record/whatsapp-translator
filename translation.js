@@ -43,7 +43,7 @@ const server = http.createServer((req, res) => {
 
     // When all the data is received, process it
     req.on('end', () => {
-        console.log('Received POST data:', body.message);
+        console.log('Received POST data:', body);
 
         translate(body.message)
         .then(gptResponse => {
