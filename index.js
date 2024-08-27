@@ -45,7 +45,19 @@ client.on('qr', (qr) => {
 });
 
 client.on('ready', () => {
-    console.log('Client is ready!');
+  console.log('Client is ready!');
+});
+
+client.on('disconnected', () => {
+  console.log('Client is disconnected!');
+});
+
+client.on('authenticated', () => {
+  console.log('Client is authenticated!');
+});
+
+client.on('auth_failure', () => {
+  console.log('Client is auth_failure!');
 });
 
 client.on('message', msg => {
