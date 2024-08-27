@@ -4,7 +4,11 @@ const qrcode = require('qrcode-terminal');
 const OpenAI = require("openai");
 const ai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-const client = new Client();
+const client = new Client({
+  puppeteer: {
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  },
+});
 
 const WHITELIST = [
     process.env.MY_PHONE + '@c.us',
@@ -61,6 +65,8 @@ client.on('auth_failure', () => {
 });
 
 client.on('message', msg => {
+
+    console.log(msg)
 
     if (!WHITELIST.includes(msg.from)) return;
 
