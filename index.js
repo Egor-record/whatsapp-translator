@@ -44,8 +44,6 @@ client.on('auth_failure', () => {
 
 client.on('message', msg => {
 
-    console.log(msg)
-
     if (!WHITELIST.includes(msg.from)) return;
 
     const fetch = require('node-fetch');
@@ -61,20 +59,13 @@ client.on('message', msg => {
     })
     .then(response => response.json())
     .then(data => {
-      console.log('Response:', data);
+      client.sendMessage(msg.from, data.gptResponse);
+      console.log('Response:', data.gptResponse);
     })
     .catch(error => {
       console.error('Request Error:', error);
     });
 
-    // translate(msg.body)
-    // .then(gptResponse => {
-    //     client.sendMessage(msg.from, gptResponse);
-    // })
-    // .catch(error => {
-    //     client.sendMessage(msg.from, 'Error during translation :(');
-    //     console.error("Error during translation:", error);
-    // });
 
 });
 

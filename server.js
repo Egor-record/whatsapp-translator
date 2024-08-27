@@ -37,16 +37,26 @@ const server = http.createServer((req, res) => {
 
     // Collect the data chunks
     req.on('data', chunk => {
-      body += chunk.toString(); // Convert buffer to string
+      body += chunk.toString(); 
+
     });
 
     // When all the data is received, process it
     req.on('end', () => {
-      console.log('Received POST data:', body);
+        console.log('Received POST data:', body.message);
 
-      // Send a response back to the client
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ message: 'Data received successfully', receivedData: body }));
+        translate(body.message)
+        .then(gptResponse => {
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ gptResponse: gptResponse }));
+        })
+        .catch(error => {
+          console.error('Request error:', err);
+          res.writeHead(500, { 'Content-Type': 'text/plain' });
+          res.end('Internal Server Error');
+        });
+
+
     });
 
     // Handle errors
